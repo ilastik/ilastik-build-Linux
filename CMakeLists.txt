@@ -21,6 +21,8 @@ endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${BUILDEM_REPO_DIR})
 
+set(CPLEX_ROOT_DIR "" CACHE PATH "CPLEX root directory")
+
 include(ilastik-gui)
 
 #install(CODE "execute_process(COMMAND ${PYTHON_EXE} ${PROJECT_SOURCE_DIR}/compile_all.py ${BUILDEM_DIR}/ilastik)")
