@@ -61,7 +61,6 @@ INSTALL(PROGRAMS
     ${BUILDEM_DIR}/bin/ilastik_headless
     ${BUILDEM_DIR}/bin/ilastik_headless_test
     ${BUILDEM_DIR}/bin/setenv_ilastik_gui.sh
-    ${BUILDEM_DIR}/bin/setenv_ilastik_headless.sh    
     ${BUILDEM_DIR}/bin/python   
     ${BUILDEM_DIR}/bin/python2.7    
   DESTINATION bin)
