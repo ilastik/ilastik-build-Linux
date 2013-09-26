@@ -25,12 +25,32 @@ set(CPLEX_ROOT_DIR "" CACHE PATH "CPLEX root directory")
 
 include(ilastik-gui)
 
+configure_file(${PROJECT_SOURCE_DIR}/relative-rpath.sh.in ${BUILDEM_DIR}/tmp/relative-rpath.sh @ONLY)
+
 #install(CODE "execute_process(COMMAND ${PYTHON_EXE} ${PROJECT_SOURCE_DIR}/compile_all.py ${BUILDEM_DIR}/ilastik)")
 
+# set relative RPATH in libraries and executable, or delete RPATH if necessary
+install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh ${BUILDEM_DIR}/lib ${BUILDEM_DIR}/lib)")
+install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh ${BUILDEM_DIR}/lib ${BUILDEM_DIR}/plugins)")
+install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh delete ${ilastik_SRC_DIR})")
+install(CODE "execute_process(COMMAND chrpath -r \\$ORIGIN/../lib ${BUILDEM_DIR}/bin/python2.7)")
+
+INSTALL(PROGRAMS
+    ${BUILDEM_DIR}/bin/ilastik_clusterized
+    ${BUILDEM_DIR}/bin/ilastik_gui
+    ${BUILDEM_DIR}/bin/ilastik_gui_test
+    ${BUILDEM_DIR}/bin/ilastik_headless
+    ${BUILDEM_DIR}/bin/ilastik_headless_test
+    ${BUILDEM_DIR}/bin/setenv_ilastik_gui.sh
+    ${BUILDEM_DIR}/bin/setenv_ilastik_headless.sh    
+    ${BUILDEM_DIR}/bin/python   
+    ${BUILDEM_DIR}/bin/python2.7    
+  DESTINATION bin)
+
+#INSTALL(DIRECTORY ${BUILDEM_DIR}/bin/ DESTINATION bin USE_SOURCE_PERMISSIONS)
 INSTALL(DIRECTORY ${ilastik_SRC_DIR}/ DESTINATION src/${ilastik_NAME} USE_SOURCE_PERMISSIONS)
-INSTALL(DIRECTORY ${BUILDEM_DIR}/bin/ DESTINATION bin USE_SOURCE_PERMISSIONS)
 INSTALL(DIRECTORY ${BUILDEM_DIR}/lib/ DESTINATION lib USE_SOURCE_PERMISSIONS)
-INSTALL(DIRECTORY ${BUILDEM_DIR}/include/ DESTINATION include USE_SOURCE_PERMISSIONS)
+INSTALL(DIRECTORY ${BUILDEM_DIR}/include/python2.7/ DESTINATION include/python2.7 USE_SOURCE_PERMISSIONS)
 INSTALL(DIRECTORY ${BUILDEM_DIR}/plugins/ DESTINATION plugins USE_SOURCE_PERMISSIONS)
 
 SET(CPACK_PACKAGE_VENDOR "The ilastik Team")
