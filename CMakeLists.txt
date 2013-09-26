@@ -2,6 +2,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 project(ilastik)
 
+#############################################
+#
+#     install 'buildem' build scripts
+#
+#############################################
+
 set (BUILDEM_DIR "None" CACHE TYPE STRING)
 
 if (${BUILDEM_DIR} STREQUAL "None")
@@ -21,13 +27,26 @@ endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${BUILDEM_REPO_DIR})
 
+#############################################
+#
+#     compile ilastik and its dependencies
+#
+#############################################
+
 set(CPLEX_ROOT_DIR "" CACHE PATH "CPLEX root directory")
 
 include(ilastik-gui)
 
+#############################################
+#
+#     install
+#
+#############################################
+
 configure_file(${PROJECT_SOURCE_DIR}/relative-rpath.sh.in ${BUILDEM_DIR}/tmp/relative-rpath.sh @ONLY)
 
-#install(CODE "execute_process(COMMAND ${PYTHON_EXE} ${PROJECT_SOURCE_DIR}/compile_all.py ${BUILDEM_DIR}/ilastik)")
+# compile the python sources so that we can potentially install into write-protected directories
+install(CODE "execute_process(COMMAND ${PYTHON_EXE} ${PROJECT_SOURCE_DIR}/compile_all.py ${ilastik_SRC_DIR})")
 
 # set relative RPATH in libraries and executable, or delete RPATH if necessary
 install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh ${BUILDEM_DIR}/lib ${BUILDEM_DIR}/lib)")
@@ -47,11 +66,16 @@ INSTALL(PROGRAMS
     ${BUILDEM_DIR}/bin/python2.7    
   DESTINATION bin)
 
-#INSTALL(DIRECTORY ${BUILDEM_DIR}/bin/ DESTINATION bin USE_SOURCE_PERMISSIONS)
 INSTALL(DIRECTORY ${ilastik_SRC_DIR}/ DESTINATION src/${ilastik_NAME} USE_SOURCE_PERMISSIONS)
 INSTALL(DIRECTORY ${BUILDEM_DIR}/lib/ DESTINATION lib USE_SOURCE_PERMISSIONS)
 INSTALL(DIRECTORY ${BUILDEM_DIR}/include/python2.7/ DESTINATION include/python2.7 USE_SOURCE_PERMISSIONS)
 INSTALL(DIRECTORY ${BUILDEM_DIR}/plugins/ DESTINATION plugins USE_SOURCE_PERMISSIONS)
+
+#############################################
+#
+#     create binary package
+#
+#############################################
 
 SET(CPACK_PACKAGE_VENDOR "The ilastik Team")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY
