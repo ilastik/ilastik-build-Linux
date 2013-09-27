@@ -44,6 +44,7 @@ include(ilastik-gui)
 #############################################
 
 configure_file(${PROJECT_SOURCE_DIR}/relative-rpath.sh.in ${BUILDEM_DIR}/tmp/relative-rpath.sh @ONLY)
+configure_file(${PROJECT_SOURCE_DIR}/list-dependencies.sh ${BUILDEM_DIR}/bin/list-dependencies.sh COPYONLY)
 
 # compile the python sources so that we can potentially install into write-protected directories
 install(CODE "execute_process(COMMAND ${PYTHON_EXE} ${PROJECT_SOURCE_DIR}/compile_all.py ${ilastik_SRC_DIR})")
@@ -62,6 +63,7 @@ INSTALL(PROGRAMS
     ${BUILDEM_DIR}/bin/ilastik_headless_test
     ${BUILDEM_DIR}/bin/setenv_ilastik_gui.sh
     ${BUILDEM_DIR}/bin/python   
+    ${BUILDEM_DIR}/bin/python2   
     ${BUILDEM_DIR}/bin/python2.7    
   DESTINATION bin)
 
