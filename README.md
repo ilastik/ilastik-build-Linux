@@ -9,7 +9,7 @@ Use buildem to compile ilastik and all its dependencies on Linux. Usage:
 > git clone https://github.com/ilastik/ilastik-build-Linux.git
 > mkdir build
 > cd build
-> cmake ../ilastik-build-Linux -D BUILDEM_DIR=<ilastik_build_dir>
+> cmake ../ilastik-build-Linux -DBUILDEM_DIR=<ilastik_build_dir>
 > make help      # (Optional: View the list of targets)
 > make           # or 'make -j8' for parallel builds
 > make package   # to create a 'ilastik-0.6.a-Linux.tar.gz' binary installer
