@@ -37,6 +37,16 @@ set(CPLEX_ROOT_DIR "" CACHE PATH "CPLEX root directory")
 
 include(ilastik-gui)
 
+set (PACKAGE_WITH_CPLEX ON CACHE BOOL "Include CPLEX shared libraries in the final binary pacakge." FORCE)
+if (PACKAGE_WITH_CPLEX)
+	if (CPLEX_ROOT_DIR)
+		install( TARGETS cplex-shared concert-shared ilocplex-shared
+				 LIBRARY DESTINATION ${BUILDEM_DIR}/lib )
+	else()
+		message(FATAL_ERROR "Cannot package with CPLEX; CPLEX_ROOT_DIR is not valid")
+	endif()
+endif()
+
 #############################################
 #
 #     install
