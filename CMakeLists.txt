@@ -43,7 +43,12 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${BUILDEM_REPO_DIR})
 
 set(CPLEX_ROOT_DIR "" CACHE PATH "CPLEX root directory")
 
-include(ilastik-gui)
+set(ILASTIK_HEADLESS_ONLY FALSE CACHE BOOL "Build only headless support for ilastik")
+if (ILASTIK_HEADLESS_ONLY)
+    include (ilastik)
+else()
+    include (ilastik-gui)
+endif()
 
 set (PACKAGE_WITH_CPLEX OFF CACHE BOOL "Include CPLEX shared libraries in the final binary pacakge." FORCE)
 if (PACKAGE_WITH_CPLEX)
