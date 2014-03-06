@@ -10,7 +10,14 @@ if [ -z "$2" ]; then
     exit 1
 fi
 
-which chrpath > /dev/null || { echo "'chrpath' not found. Install it by 'sudo apt-get install chrpath'." && exit 1; }
+which chrpath > /dev/null || { echo "
+************************************************************************
+************************************************************************
+** 'chrpath' not found. Install it by 'sudo apt-get install chrpath'. **
+** Without chrpath, your binary may not be usable on other machines.  **
+************************************************************************
+************************************************************************
+" && exit 1; }
 
 files=`find $2 -name "*.so"`
 
