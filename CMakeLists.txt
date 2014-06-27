@@ -50,6 +50,8 @@ else()
     include (ilastik-gui)
 endif()
 
+include (scikit-image)
+
 set (PACKAGE_WITH_CPLEX OFF CACHE BOOL "Include CPLEX shared libraries in the final binary pacakge." FORCE)
 if (PACKAGE_WITH_CPLEX)
 	if (CPLEX_ROOT_DIR)
@@ -78,18 +80,25 @@ install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh ${BUI
 install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh delete ${ilastik_SRC_DIR})")
 install(CODE "execute_process(COMMAND chrpath -r \\$ORIGIN/../lib ${BUILDEM_DIR}/bin/python2.7)")
 
-INSTALL(PROGRAMS
-    ${BUILDEM_DIR}/bin/ilastik_clusterized
-    ${BUILDEM_DIR}/bin/ilastik_gui
-    ${BUILDEM_DIR}/bin/ilastik_gui_test
-    ${BUILDEM_DIR}/bin/ilastik_headless
-    ${BUILDEM_DIR}/bin/ilastik_headless_test
-    ${BUILDEM_DIR}/bin/setenv_ilastik_gui.sh
-    ${BUILDEM_DIR}/bin/list-dependencies.sh
-    ${BUILDEM_DIR}/bin/python   
-    ${BUILDEM_DIR}/bin/python2   
-    ${BUILDEM_DIR}/bin/python2.7    
-  DESTINATION bin)
+file(GLOB ALL_BIN_FILES "${BUILDEM_DIR}/bin/*")
+list(REMOVE_ITEM ALL_BIN_FILES "${BUILDEM_DIR}/bin/tests")
+
+INSTALL(PROGRAMS ${ALL_BIN_FILES}
+        DESTINATION bin)
+
+
+#INSTALL(PROGRAMS
+#    ${BUILDEM_DIR}/bin/ilastik_clusterized
+#    ${BUILDEM_DIR}/bin/ilastik_gui
+#    ${BUILDEM_DIR}/bin/ilastik_gui_test
+#    ${BUILDEM_DIR}/bin/ilastik_headless
+#    ${BUILDEM_DIR}/bin/ilastik_headless_test
+#    ${BUILDEM_DIR}/bin/setenv_ilastik_gui.sh
+#    ${BUILDEM_DIR}/bin/list-dependencies.sh
+#    ${BUILDEM_DIR}/bin/python   
+#    ${BUILDEM_DIR}/bin/python2   
+#    ${BUILDEM_DIR}/bin/python2.7    
+#  DESTINATION bin)
 
 INSTALL(PROGRAMS ${PROJECT_SOURCE_DIR}/run_ilastik.sh
         DESTINATION bin/..)
