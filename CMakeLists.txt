@@ -80,14 +80,13 @@ install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh ${BUI
 install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh delete ${ilastik_SRC_DIR})")
 install(CODE "execute_process(COMMAND chrpath -r \\$ORIGIN/../lib ${BUILDEM_DIR}/bin/python2.7)")
 
-file(GLOB ALL_BIN_FILES "${BUILDEM_DIR}/bin/*")
+file(GLOB_RECURSE ALL_BIN_FILES "${BUILDEM_DIR}/bin/*")
 list(REMOVE_ITEM ALL_BIN_FILES "${BUILDEM_DIR}/bin/tests")
 
-INSTALL(PROGRAMS ${ALL_BIN_FILES}
-        DESTINATION bin)
+INSTALL(PROGRAMS ${ALL_BIN_FILES} DESTINATION bin)
 
 
-#INSTALL(PROGRAMS
+# INSTALL(PROGRAMS
 #    ${BUILDEM_DIR}/bin/ilastik_clusterized
 #    ${BUILDEM_DIR}/bin/ilastik_gui
 #    ${BUILDEM_DIR}/bin/ilastik_gui_test
