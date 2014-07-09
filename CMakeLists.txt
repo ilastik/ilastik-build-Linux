@@ -110,6 +110,11 @@ INSTALL(DIRECTORY ${BUILDEM_DIR}/lib/ DESTINATION lib USE_SOURCE_PERMISSIONS)
 INSTALL(DIRECTORY ${BUILDEM_DIR}/include/python2.7/ DESTINATION include/python2.7 USE_SOURCE_PERMISSIONS)
 INSTALL(DIRECTORY ${BUILDEM_DIR}/plugins/ DESTINATION plugins USE_SOURCE_PERMISSIONS)
 
+# copy license file to distribution
+# this file will be shown in the help->license dialog if it exists
+INSTALL(FILES ${PROJECT_SOURCE_DIR}/COPYING
+        DESTINATION bin/..)
+
 #############################################
 #
 #     create binary package
