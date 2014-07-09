@@ -25,3 +25,4 @@ The cmake step supports the following additional cache variables:
 - `-DILASTIK_HEADLESS_ONLY=1` (Builds the "headless" ilastik and its dependencies.  Does not build qt, vtk, etc.)
 - `-DCPLEX_ROOT_DIR=/path/to/cplex` (Required for building libraries that need CPLEX, such as pgmlink.)
 - `-DPACKAGE_WITH_CPLEX=OFF` (Exclude CPLEX libraries from the tarball produced in the `make package` step.)
+- `-DWITH_ATLAS=0` (Use OpenBLAS instead of ATLAS.)
