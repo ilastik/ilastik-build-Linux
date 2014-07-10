@@ -68,72 +68,74 @@ endif()
 #
 #############################################
 
-configure_file(${PROJECT_SOURCE_DIR}/relative-rpath.sh.in ${BUILDEM_DIR}/tmp/relative-rpath.sh @ONLY)
-configure_file(${PROJECT_SOURCE_DIR}/list-dependencies.sh ${BUILDEM_DIR}/bin/list-dependencies.sh COPYONLY)
+IF(NOT APPLE)
+    configure_file(${PROJECT_SOURCE_DIR}/relative-rpath.sh.in ${BUILDEM_DIR}/tmp/relative-rpath.sh @ONLY)
+    configure_file(${PROJECT_SOURCE_DIR}/list-dependencies.sh ${BUILDEM_DIR}/bin/list-dependencies.sh COPYONLY)
 
-# compile the python sources so that we can potentially install into write-protected directories
-install(CODE "execute_process(COMMAND ${PYTHON_EXE} ${PROJECT_SOURCE_DIR}/compile_all.py ${ilastik_SRC_DIR})")
+    # compile the python sources so that we can potentially install into write-protected directories
+    install(CODE "execute_process(COMMAND ${PYTHON_EXE} ${PROJECT_SOURCE_DIR}/compile_all.py ${ilastik_SRC_DIR})")
 
-# set relative RPATH in libraries and executable, or delete RPATH if necessary
-install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh ${BUILDEM_DIR}/lib ${BUILDEM_DIR}/lib)")
-install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh ${BUILDEM_DIR}/lib ${BUILDEM_DIR}/plugins)")
-install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh delete ${ilastik_SRC_DIR})")
-install(CODE "execute_process(COMMAND chrpath -r \\$ORIGIN/../lib ${BUILDEM_DIR}/bin/python2.7)")
+    # set relative RPATH in libraries and executable, or delete RPATH if necessary
+    install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh ${BUILDEM_DIR}/lib ${BUILDEM_DIR}/lib)")
+    install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh ${BUILDEM_DIR}/lib ${BUILDEM_DIR}/plugins)")
+    install(CODE "execute_process(COMMAND ${BUILDEM_DIR}/tmp/relative-rpath.sh delete ${ilastik_SRC_DIR})")
+    install(CODE "execute_process(COMMAND chrpath -r \\$ORIGIN/../lib ${BUILDEM_DIR}/bin/python2.7)")
 
-file(GLOB_RECURSE ALL_BIN_FILES "${BUILDEM_DIR}/bin/*")
-list(REMOVE_ITEM ALL_BIN_FILES "${BUILDEM_DIR}/bin/tests")
+    file(GLOB ALL_BIN_FILES "${BUILDEM_DIR}/bin/*")
+    list(REMOVE_ITEM ALL_BIN_FILES "${BUILDEM_DIR}/bin/tests")
 
-INSTALL(PROGRAMS ${ALL_BIN_FILES} DESTINATION bin)
+    INSTALL(PROGRAMS ${ALL_BIN_FILES} DESTINATION bin)
 
 
-# INSTALL(PROGRAMS
-#    ${BUILDEM_DIR}/bin/ilastik_clusterized
-#    ${BUILDEM_DIR}/bin/ilastik_gui
-#    ${BUILDEM_DIR}/bin/ilastik_gui_test
-#    ${BUILDEM_DIR}/bin/ilastik_headless
-#    ${BUILDEM_DIR}/bin/ilastik_headless_test
-#    ${BUILDEM_DIR}/bin/setenv_ilastik_gui.sh
-#    ${BUILDEM_DIR}/bin/list-dependencies.sh
-#    ${BUILDEM_DIR}/bin/python   
-#    ${BUILDEM_DIR}/bin/python2   
-#    ${BUILDEM_DIR}/bin/python2.7    
-#  DESTINATION bin)
+    # INSTALL(PROGRAMS
+    #    ${BUILDEM_DIR}/bin/ilastik_clusterized
+    #    ${BUILDEM_DIR}/bin/ilastik_gui
+    #    ${BUILDEM_DIR}/bin/ilastik_gui_test
+    #    ${BUILDEM_DIR}/bin/ilastik_headless
+    #    ${BUILDEM_DIR}/bin/ilastik_headless_test
+    #    ${BUILDEM_DIR}/bin/setenv_ilastik_gui.sh
+    #    ${BUILDEM_DIR}/bin/list-dependencies.sh
+    #    ${BUILDEM_DIR}/bin/python   
+    #    ${BUILDEM_DIR}/bin/python2   
+    #    ${BUILDEM_DIR}/bin/python2.7    
+    #  DESTINATION bin)
 
-INSTALL(PROGRAMS ${PROJECT_SOURCE_DIR}/run_ilastik.sh
-        DESTINATION bin/..)
+    INSTALL(PROGRAMS ${PROJECT_SOURCE_DIR}/run_ilastik.sh
+            DESTINATION bin/..)
 
-INSTALL(FILES ${PROJECT_SOURCE_DIR}/qt.conf
-        DESTINATION bin)
+    INSTALL(FILES ${PROJECT_SOURCE_DIR}/qt.conf
+            DESTINATION bin)
 
-INSTALL(DIRECTORY ${ilastik_SRC_DIR}/ DESTINATION src/${ilastik_NAME} USE_SOURCE_PERMISSIONS)
-INSTALL(DIRECTORY ${BUILDEM_DIR}/lib/ DESTINATION lib USE_SOURCE_PERMISSIONS)
-INSTALL(DIRECTORY ${BUILDEM_DIR}/include/python2.7/ DESTINATION include/python2.7 USE_SOURCE_PERMISSIONS)
-INSTALL(DIRECTORY ${BUILDEM_DIR}/plugins/ DESTINATION plugins USE_SOURCE_PERMISSIONS)
+    INSTALL(DIRECTORY ${ilastik_SRC_DIR}/ DESTINATION src/${ilastik_NAME} USE_SOURCE_PERMISSIONS)
+    INSTALL(DIRECTORY ${BUILDEM_DIR}/lib/ DESTINATION lib USE_SOURCE_PERMISSIONS)
+    INSTALL(DIRECTORY ${BUILDEM_DIR}/include/python2.7/ DESTINATION include/python2.7 USE_SOURCE_PERMISSIONS)
+    INSTALL(DIRECTORY ${BUILDEM_DIR}/plugins/ DESTINATION plugins USE_SOURCE_PERMISSIONS)
 
-# copy license file to distribution
-# this file will be shown in the help->license dialog if it exists
-INSTALL(FILES ${PROJECT_SOURCE_DIR}/COPYING
-        DESTINATION bin/..)
+    # copy license file to distribution
+    # this file will be shown in the help->license dialog if it exists
+    INSTALL(FILES ${PROJECT_SOURCE_DIR}/COPYING
+            DESTINATION bin/..)
 
-#############################################
-#
-#     create binary package
-#
-#############################################
+    #############################################
+    #
+    #     create binary package
+    #
+    #############################################
 
-SET(CPACK_PACKAGE_VENDOR "The ilastik Team")
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY
-    "Interactive image labeling and segmentation toolkit."
-)
+    SET(CPACK_PACKAGE_VENDOR "The ilastik Team")
+    SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY
+        "Interactive image labeling and segmentation toolkit."
+    )
 
-# package version setup
-set(ILASTIK_VERSION_FILE "${BUILDEM_SRC_DIR}/ilastik/ilastik/ilastik/__init__.py")
-CONFIGURE_FILE( ${PROJECT_SOURCE_DIR}/CPackUpdateVersion.cmake.in
-				${PROJECT_BINARY_DIR}/CPackUpdateVersion.cmake @ONLY)
-set(CPACK_PROJECT_CONFIG_FILE ${PROJECT_BINARY_DIR}/CPackUpdateVersion.cmake)
+    # package version setup
+    set(ILASTIK_VERSION_FILE "${BUILDEM_SRC_DIR}/ilastik/ilastik/ilastik/__init__.py")
+    CONFIGURE_FILE( ${PROJECT_SOURCE_DIR}/CPackUpdateVersion.cmake.in
+    				${PROJECT_BINARY_DIR}/CPackUpdateVersion.cmake @ONLY)
+    set(CPACK_PROJECT_CONFIG_FILE ${PROJECT_BINARY_DIR}/CPackUpdateVersion.cmake)
 
-SET(CPACK_STRIP_FILES TRUE)
-SET(CPACK_PACKAGE_CONTACT "ilastik Team <team@ilastik.org>")
-SET(CPACK_GENERATOR TGZ)
+    SET(CPACK_STRIP_FILES TRUE)
+    SET(CPACK_PACKAGE_CONTACT "ilastik Team <team@ilastik.org>")
+    SET(CPACK_GENERATOR TGZ)
 
-INCLUDE (CPack)
+    INCLUDE (CPack)
+ENDIF(NOT APPLE)
