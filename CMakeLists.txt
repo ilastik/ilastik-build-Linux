@@ -102,6 +102,8 @@ IF(NOT APPLE)
 
     INSTALL(PROGRAMS ${PROJECT_SOURCE_DIR}/run_ilastik.sh
             DESTINATION bin/..)
+    INSTALL(PROGRAMS ${PROJECT_SOURCE_DIR}/ilastik_python.sh
+            DESTINATION bin/..)
 
     INSTALL(FILES ${PROJECT_SOURCE_DIR}/qt.conf
             DESTINATION bin)
